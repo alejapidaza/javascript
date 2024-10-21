@@ -2,45 +2,41 @@ const dias = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes"];
 let alumnosPorDia = [];
 let total = 0;
 
-// map - cantidad de alumnos por día
-dias.map((dia, i) => {
-let alumnos = parseInt(prompt(`¿Cuántos alumnos vinieron el ${dia}?`));
-alumnosPorDia.push(alumnos);
-  total += alumnos;  // Suma los alumnos de cada día
-});
+// Recolección de datos de los alumnos
+function recolectarDatos() {
+    console.log("La función recolectarDatos se está ejecutando");
+    dias.forEach((dia, i) => {
+        let alumnos = parseInt(prompt(`¿Cuántos alumnos vinieron el ${dia}?`)) || 0; // Valor por defecto a 0 si no se ingresa nada
+        alumnosPorDia.push(alumnos);
+        total += alumnos;  // Suma los alumnos de cada día
+        console.log(`Se agregaron ${alumnos} alumnos para el día ${dia}`);
+    });
+    console.log("Se recolectaron los datos correctamente");
+    mostrarResultados();
+}
 
-// Math.max y spread operator - encontrar el día con más alumnos
-let maxAlumnos = Math.max(...alumnosPorDia);
-let diaConMasAlumnos = dias[alumnosPorDia.indexOf(maxAlumnos)];
+// Mostrar resultados
+function mostrarResultados() {
+    let maxAlumnos = Math.max(...alumnosPorDia);
+    let diaConMasAlumnos = dias[alumnosPorDia.indexOf(maxAlumnos)];
+    let diasConMuchosAlumnos = dias.filter((dia, i) => alumnosPorDia[i] > 10);
+    let mediaAlumnos = alumnosPorDia.reduce((acc, current) => acc + current, 0) / alumnosPorDia.length;
 
-// filter - días con más de 10 alumnos
-let diasConMuchosAlumnos = dias.filter((dia, i) => alumnosPorDia[i] > 10);
+    const resultadosDiv = document.getElementById("resultados");
+    resultadosDiv.innerHTML = `
+        <p>El total de alumnos que vinieron durante la semana es: ${total}</p>
+        <p>El día con más alumnos fue el ${diaConMasAlumnos} con ${maxAlumnos} alumnos.</p>
+        <p>Los días con más de 10 alumnos fueron: ${diasConMuchosAlumnos.join(", ")}</p>
+        <p>La media de alumnos por día es: ${mediaAlumnos.toFixed(2)}</p>
+    `;
 
-// reduce - calcular la media de alumnos por día
-let mediaAlumnos = alumnosPorDia.reduce((acc, current) => acc + current, 0) / alumnosPorDia.length;
+    alumnosPorDia.forEach((alumnos, i) => {
+        console.log(`El día ${dias[i]} tuvo ${alumnos} alumnos.`);
+    });
+}
 
-// Alertas y resultados 
-alert(`El total de alumnos que vinieron durante la semana es: ${total}`);
-
-alert(`El día con más alumnos fue el ${diaConMasAlumnos} con ${maxAlumnos} alumnos.`);
-
-alert(`Los días con más de 10 alumnos fueron: ${diasConMuchosAlumnos.join(", ")}`);
-
-alert(`La media de alumnos por día es: ${mediaAlumnos.toFixed(2)}`);
-
-const resultadosDiv = document.createElement("div");
-resultadosDiv.className = "resultados"; // Clase resultados
-document.body.appendChild(resultadosDiv);
-
-// template literals y join - contenido del div
-resultadosDiv.innerHTML = [
-`El total de alumnos que vinieron durante la semana es: ${total}`,
-`El día con más alumnos fue el ${diaConMasAlumnos} con ${maxAlumnos} alumnos.`,
-`Los días con más de 10 alumnos fueron: ${diasConMuchosAlumnos.join(", ")}`,
-`La media de alumnos por día es: ${mediaAlumnos.toFixed(2)}`
-].join("</p><p>");
-
-// forEach - resultados en la consola
-alumnosPorDia.forEach((alumnos, i) => {
-console.log(`El día ${dias[i]} tuvo ${alumnos} alumnos.`);
+// Evento para iniciar la recolección de datos
+document.addEventListener("DOMContentLoaded", function() {
+    const iniciarButton = document.getElementById("iniciar");
+    iniciarButton.addEventListener("click", recolectarDatos);
 });
