@@ -1,12 +1,13 @@
 const dias = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes"];
-let alumnosPorDia = [];
+const alumnosPorDia = [];
 let total = 0;
 
 // Recolección de datos de los alumnos
 function recolectarDatos() {
     console.log("La función recolectarDatos se está ejecutando");
-    dias.forEach((dia, i) => {
-        let alumnos = parseInt(prompt(`¿Cuántos alumnos vinieron el ${dia}?`)) || 0; // Valor por defecto a 0 si no se ingresa nada
+    dias.forEach((dia) => {
+        let alumnos = prompt(`¿Cuántos alumnos vinieron el ${dia}?`);
+        alumnos = (alumnos !== null && !isNaN(alumnos)) ? parseInt(alumnos) : 0;
         alumnosPorDia.push(alumnos);
         total += alumnos;  // Suma los alumnos de cada día
         console.log(`Se agregaron ${alumnos} alumnos para el día ${dia}`);
@@ -17,10 +18,10 @@ function recolectarDatos() {
 
 // Mostrar resultados
 function mostrarResultados() {
-    let maxAlumnos = Math.max(...alumnosPorDia);
-    let diaConMasAlumnos = dias[alumnosPorDia.indexOf(maxAlumnos)];
-    let diasConMuchosAlumnos = dias.filter((dia, i) => alumnosPorDia[i] > 10);
-    let mediaAlumnos = alumnosPorDia.reduce((acc, current) => acc + current, 0) / alumnosPorDia.length;
+    const maxAlumnos = Math.max(...alumnosPorDia);
+    const diaConMasAlumnos = dias[alumnosPorDia.indexOf(maxAlumnos)];
+    const diasConMuchosAlumnos = dias.filter((dia, i) => alumnosPorDia[i] > 10 && !isNaN(alumnosPorDia[i]));
+    const mediaAlumnos = total / dias.length;
 
     const resultadosDiv = document.getElementById("resultados");
     resultadosDiv.innerHTML = `
